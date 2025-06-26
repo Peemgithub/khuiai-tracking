@@ -7,7 +7,6 @@ import { SearchBar } from '@/components/marketplace/SearchBar';
 import { CategoryFilter } from '@/components/marketplace/CategoryFilter';
 import { CollectiblesGrid } from '@/components/marketplace/CollectiblesGrid';
 import { Collectible } from '@/lib/types';
-import { WalletConnect } from '@/components/WalletConnect';
 
 export default function HomePage() {
   const [collectibles, setCollectibles] = useState<Collectible[]>([]);
@@ -122,8 +121,6 @@ export default function HomePage() {
   return (
     <Providers>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-        <WalletConnect onConnect={() => {}} />
-        
         <MarketplaceHeader />
         
         <main className="container mx-auto px-4 py-8">

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { MarketplaceHeader } from '@/components/marketplace/MarketplaceHeader';
-import { WalletConnect } from '@/components/WalletConnect';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -192,7 +191,6 @@ export default function VerificationPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <MarketplaceHeader />
-      <WalletConnect onConnect={() => {}} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}

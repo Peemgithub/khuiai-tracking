@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { Wallet, Shield, CheckCircle, XCircle, X } from 'lucide-react';
 import { useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 
@@ -15,6 +15,7 @@ interface WalletConnectProps {
 export function WalletConnect({ onConnect }: WalletConnectProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const [isCardOpen, setIsCardOpen] = useState(false);
 
   const { address, isConnected } = useAccount();
   const { connect, isPending } = useConnect();
@@ -55,16 +56,27 @@ export function WalletConnect({ onConnect }: WalletConnectProps) {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
+  // If wallet is connected, show the connected state card
   if (isConnected && address) {
     return (
       <div className="fixed top-4 right-4 z-50">
         <Card className="w-80">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <Wallet className="h-4 w-4" />
-              Wallet Connected
-              <CheckCircle className="h-4 w-4 text-green-500" />
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Wallet className="h-4 w-4" />
+                Wallet Connected
+                <CheckCircle className="h-4 w-4 text-green-500" />
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsCardOpen(false)}
+                className="h-6 w-6 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
@@ -99,14 +111,40 @@ export function WalletConnect({ onConnect }: WalletConnectProps) {
     );
   }
 
+  // If card is not open, show just the connect wallet button
+  if (!isCardOpen) {
+    return (
+      <div className="fixed top-20 right-4 z-50">
+        <Button
+          onClick={() => setIsCardOpen(true)}
+          className="flex items-center gap-2"
+        >
+          <Wallet className="h-4 w-4" />
+          Connect Wallet
+        </Button>
+      </div>
+    );
+  }
+
+  // Show the full connect wallet card when open
   return (
     <div className="fixed top-4 right-4 z-50">
       <Card className="w-80">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <Wallet className="h-4 w-4" />
-            Connect Wallet
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Wallet className="h-4 w-4" />
+              Connect Wallet
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsCardOpen(false)}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-gray-600">

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Providers } from '@/components/Providers';
 import { MarketplaceHeader } from '@/components/marketplace/MarketplaceHeader';
 import { CollectiblesGrid } from '@/components/marketplace/CollectiblesGrid';
 import { CategoryFilter } from '@/components/marketplace/CategoryFilter';
 import { SearchBar } from '@/components/marketplace/SearchBar';
 import { StatsOverview } from '@/components/marketplace/StatsOverview';
-import { WalletConnect } from '@/components/WalletConnect';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -264,7 +264,6 @@ export default function MarketplacePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <MarketplaceHeader />
-      <WalletConnect onConnect={() => {}} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
@@ -286,7 +285,11 @@ export default function MarketplacePage() {
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="flex-1">
-              <SearchBar onSearch={setSearchQuery} />
+              <SearchBar 
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search collectibles, brands, or tags..."
+              />
             </div>
             <div className="flex gap-2">
               <Button variant="outline" className="flex items-center gap-2">
@@ -301,7 +304,6 @@ export default function MarketplacePage() {
           </div>
           
           <CategoryFilter 
-            categories={categories}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />
