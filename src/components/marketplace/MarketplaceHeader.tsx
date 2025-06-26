@@ -6,14 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
-  Search, 
   Plus, 
-  Heart, 
   Bell, 
   User, 
   Shield, 
   Gem, 
-  Users,
   Settings,
   Wallet,
   CheckCircle,
@@ -24,10 +21,11 @@ import { useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 import { injected } from 'wagmi/connectors';
 
 export function MarketplaceHeader() {
-  const [notifications] = useState(3);
+  const [notifications] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [isCardOpen, setIsCardOpen] = useState(false);
+  const [isSocialLoginOpen, setIsSocialLoginOpen] = useState(false);
 
   const { address, isConnected } = useAccount();
   const { connect, isPending } = useConnect();
@@ -64,6 +62,15 @@ export function MarketplaceHeader() {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
+  const openSocialLogin = () => {
+    setIsSocialLoginOpen(true);
+    setIsCardOpen(false); // Close wallet card when opening social login
+  };
+
+  const closeSocialLogin = () => {
+    setIsSocialLoginOpen(false);
+  };
+
   return (
     <>
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -79,47 +86,44 @@ export function MarketplaceHeader() {
                   KunBit
                 </span>
               </Link>
-              
+            
+            </div>
+
+            {/* Navigation */}
+            <nav className="hidden lg:flex items-center gap-6">
+              <Link href="/" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                Marketplace
+              </Link>
+              <Link href="/orders" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                Orders
+              </Link>
+              <Link href="/my-collectibles" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                My Collectibles
+              </Link>
+            </nav>
+
+
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+
               <div className="hidden md:flex items-center gap-1">
                 <Badge variant="secondary" className="text-xs">
                   <Shield className="h-3 w-3 mr-1" />
                   Verified
                 </Badge>
-                <Badge variant="outline" className="text-xs">
+                {/* <Badge variant="outline" className="text-xs">
                   <Users className="h-3 w-3 mr-1" />
                   DAO
-                </Badge>
+                </Badge> */}
               </div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="hidden lg:flex items-center gap-6">
-              <Link href="/marketplace" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                Marketplace
-              </Link>
-              <Link href="/fractional" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                Fractional Ownership
-              </Link>
-              <Link href="/escrow" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                Escrow
-              </Link>
-              <Link href="/verification" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                Verification
-              </Link>
-              <Link href="/dao" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-                DAO
-              </Link>
-            </nav>
-
-            {/* Actions */}
-            <div className="flex items-center gap-3">
               {/* Search */}
-              <Button variant="ghost" size="sm" className="hidden md:flex">
+              {/* <Button variant="ghost" size="sm" className="hidden md:flex">
                 <Search className="h-4 w-4" />
-              </Button>
+              </Button> */}
 
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative">
+              <Button variant="ghost" size="sm" className="relative mr-2">
                 <Bell className="h-4 w-4" />
                 {notifications > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
@@ -128,16 +132,13 @@ export function MarketplaceHeader() {
                 )}
               </Button>
 
-              {/* Watchlist */}
-              <Button variant="ghost" size="sm">
-                <Heart className="h-4 w-4" />
-              </Button>
-
               {/* Create Listing */}
-              <Button size="sm" className="hidden md:flex">
-                <Plus className="h-4 w-4 mr-2" />
-                List Item
-              </Button>
+              <Link href="/list-item">
+                <Button size="sm" className="hidden md:flex">
+                  <Plus className="h-4 w-4 mr-2" />
+                  List Item
+                </Button>
+              </Link>
 
               {/* Connect Wallet / User Menu */}
               <div className="relative">
@@ -177,20 +178,22 @@ export function MarketplaceHeader() {
           <div className="lg:hidden py-4 border-t border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Link href="/marketplace" className="text-sm font-medium text-gray-700">
+                <Link href="/" className="text-sm font-medium text-gray-700">
                   Browse
                 </Link>
-                <Link href="/fractional" className="text-sm font-medium text-gray-700">
-                  Fractional
+                <Link href="/orders" className="text-sm font-medium text-gray-700">
+                  Orders
                 </Link>
-                <Link href="/escrow" className="text-sm font-medium text-gray-700">
-                  Escrow
+                <Link href="/my-collectibles" className="text-sm font-medium text-gray-700">
+                  My Collectibles
                 </Link>
               </div>
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                List
-              </Button>
+              <Link href="/list-item">
+                <Button size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  List
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -287,14 +290,92 @@ export function MarketplaceHeader() {
                     )}
                   </Button>
                   
-                  <div className="flex items-center gap-2 pt-2">
+                  <div className="text-center">
+                    <Button variant="outline" className="w-full" onClick={openSocialLogin}>
+                      Connect by Email or Social
+                    </Button>
+                    <div className="flex items-center justify-center gap-2 pt-4 border-t">
+                      <Shield className="h-4 w-4 text-blue-500" />
+                      <span className="text-xs text-gray-500">
+                        Protected by Privy
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* <div className="flex items-center gap-2 pt-2">
                     <Shield className="h-4 w-4 text-blue-500" />
                     <span className="text-xs text-gray-500">
                       Secure Web3 connection required
                     </span>
-                  </div>
+                  </div> */}
                 </>
               )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Social Login Modal */}
+      {isSocialLoginOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-96 mx-4">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <Shield className="h-4 w-4" />
+                  Connect with Privy
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={closeSocialLogin}
+                  className="h-6 w-6 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-gray-600 text-center">
+                Choose your preferred login method to securely connect to the marketplace
+              </p>
+              
+              <div className="space-y-3">
+                <Button variant="outline" className="w-full justify-start" onClick={() => console.log('Email login')}>
+                  <div className="w-5 h-5 bg-gray-600 rounded mr-3 flex items-center justify-center">
+                    <span className="text-white text-xs">@</span>
+                  </div>
+                  Continue with Email
+                </Button>
+                
+                <Button variant="outline" className="w-full justify-start" onClick={() => console.log('Google login')}>
+                  <div className="w-5 h-5 bg-red-500 rounded mr-3 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">G</span>
+                  </div>
+                  Continue with Google
+                </Button>
+                
+                <Button variant="outline" className="w-full justify-start" onClick={() => console.log('Twitter login')}>
+                  <div className="w-5 h-5 bg-blue-400 rounded mr-3 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">𝕏</span>
+                  </div>
+                  Continue with Twitter
+                </Button>
+                
+                <Button variant="outline" className="w-full justify-start" onClick={() => console.log('Discord login')}>
+                  <div className="w-5 h-5 bg-indigo-600 rounded mr-3 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">D</span>
+                  </div>
+                  Continue with Discord
+                </Button>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 pt-4 border-t">
+                <Shield className="h-4 w-4 text-blue-500" />
+                <span className="text-xs text-gray-500">
+                  Protected by Privy
+                </span>
+              </div>
             </CardContent>
           </Card>
         </div>

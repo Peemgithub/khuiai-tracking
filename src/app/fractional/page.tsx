@@ -89,7 +89,7 @@ export default function FractionalPage() {
       totalShares: 360,
       pricePerShare: 500,
       soldShares: 180,
-      image: '/api/placeholder/400/300',
+      image: '/Hermès Birkin 30cm.avif',
       verified: true,
       description: 'Ultra-rare Hermès Birkin with Himalayan crocodile leather.',
       benefits: [

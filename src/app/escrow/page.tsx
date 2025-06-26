@@ -33,7 +33,7 @@ export default function EscrowPage() {
       id: '1',
       item: {
         name: 'Rolex Submariner 116610LN',
-        image: '/api/placeholder/200/200',
+        image: '/Rolex Submariner 116610LN.jpg',
         price: 8500,
       },
       buyer: {
@@ -58,7 +58,7 @@ export default function EscrowPage() {
       id: '2',
       item: {
         name: 'Hermès Birkin 30cm',
-        image: '/api/placeholder/200/200',
+        image: '/Hermès Birkin 30cm.avif',
         price: 12000,
       },
       buyer: {
